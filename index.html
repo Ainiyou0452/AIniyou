@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慧建云 - 让技术赋能每一个企业</title>
+    <!-- 引入外部资源 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        :root {
+            --primary-color: #0078d7;
+            --secondary-color: #00b42a;
+            --text-color: #333;
+            --light-color: #f5f5f5;
+            --dark-color: #222;
+            --gray-color: #e0e0e0;
+            --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, #005ea6 100%);
+        }
+        body {
+            color: var(--text-color);
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: var(--primary-color);
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 5px;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-custom:hover {
+            background-color: #005ea6;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 120, 215, 0.3);
+        }
+        .btn-custom::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        .btn-custom:hover::after {
+            left: 100%;
+        }
+        .btn-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 120, 215, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 120, 215, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 120, 215, 0);
+            }
+        }
+        .bg-light-custom {
+            background-color: var(--light-color);
+        }
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .scroll-animate.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .scroll-delay-1 { transition-delay: 0.2s; }
+        .scroll-delay-2 { transition-delay: 0.4s; }
+        .scroll-delay-3 { transition-delay: 0.6s; }
+
+        /* 页面加载动画（强制2秒关闭，无依赖） */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease; /* 快速淡出 */
+        }
+        .loader-logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .loader-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .loader-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            animation: dotPulse 1s ease infinite;
+        }
+        .loader-dot:nth-child(2) { animation-delay: 0.3s; }
+        .loader-dot:nth-child(3) { animation-delay: 0.6s; }
+        @keyframes dotPulse {
+            0% { transform: scale(0.5); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.5); opacity: 0.5; }
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-brand i {
+            font-size: 28px;
+            animation: rotate 6s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .navbar-nav .nav-link {
+            font-size: 16px;
+            margin: 0 15px;
+            font-weight: 500;
+            position: relative;
+        }
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 100%;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+        }
+        .contact-btn {
+            background-color: var(--secondary-color);
+            color: #fff !important;
+            padding: 8px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .contact-btn:hover {
+            background-color: #009a24;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 180, 42, 0.3);
+        }
+
+        /* 头部banner样式 - 移除图片，用渐变+图标替代 */
+        .banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), var(--gradient-bg);
+            color: #fff;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: expand 15s ease infinite alternate;
+        }
+        .banner .icon-placeholder {
+            font-size: 80px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        @keyframes expand {
+            from { transform: scale(1); }
+            to { transform: scale(1.5); }
+        }
+        .banner h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 1s ease forwards;
+        }
+        .banner p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease 0.3s forwards;
+            opacity: 0;
+        }
+        .banner .btn-custom {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .contact-info {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 998;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .contact-info:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .contact-info p {
+            margin: 0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        /* 二维码占位 - 用图标+渐变替代 */
+        .contact-info .qr-code {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            background: var(--gradient-bg);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .contact-info:hover .qr-code {
+            transform: scale(1.1);
+        }
+
+        /* 公司介绍样式 - 图片替换为渐变+图标占位 */
+        .company-intro {
+            padding: 80px 0;
+        }
+        .intro-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        .intro-img {
+            flex: 1;
+            position: relative;
+            height: 400px;
+            border-radius: 10px;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 60px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .intro-img::after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+        .intro-img:hover::after {
+            top: 10px;
+            left: 10px;
+        }
+        .intro-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .intro-text {
+            flex: 1;
+        }
+        .intro-text h3 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            position: relative;
+            padding-left: 20px;
+        }
+        .intro-text h3::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            height: 80%;
+            width: 4px;
+            background-color: var(--primary-color);
+        }
+        .intro-text p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--light-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border: 4px solid #fff;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover::after {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(0, 120, 215, 0.5);
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::after {
+            right: -10px;
+        }
+        .right::after {
+            left: -10px;
+        }
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .timeline-content h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* 业务内容样式 */
+        .business {
+            padding: 80px 0;
+            background-color: var(--light-color);
+        }
+        .business-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.5s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .business-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary-color);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .business-card:hover::before {
+            transform: translateX(0);
+        }
+        .business-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        .business-card .icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .business-card:hover .icon {
+            transform: scale(1.2) rotate(10deg);
+            color: var(--secondary-color);
+        }
+        .business-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .business-card p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* 行业案例样式 - 图片替换为渐变+图标占位 */
+        .cases {
+            padding: 80px 0;
+        }
+        .case-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .case-tab {
+            padding: 10px 20px;
+            margin: 0 10px 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .case-tab::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        .case-tab.active::after,
+        .case-tab:hover::after {
+            width: 100%;
+        }
+        .case-tab.active {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        .case-tab:hover:not(.active) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .case-content {
+            display: none;
+        }
+        .case-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .case-item {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        .case-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        /* 案例图片占位 - 渐变+图标 */
+        .case-img-placeholder {
+            width: 100%;
+            height: 250px;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 40px;
+            transition: all 0.5s ease;
+        }
+        .case-item:hover .case-img-placeholder {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #005ea6 0%, var(--primary-color) 100%);
+        }
+        .case-item .case-text {
+            padding: 20px;
+        }
+        .case-item .case-text h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .case-item:hover .case-text h3 {
+            color: var(--primary-color);
+        }
+        .case-item .case-text p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* 服务体系样式 */
+        .service {
+            padding: 80px 0;
+            background-color: var(--light-color);
+        }
+        .service-process {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .service-process::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .process-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        .process-step {
+            width: 150px;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .process-step::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: -35px;
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .process-step:nth-child(1)::after { content: "→"; }
+        .process-step:nth-child(2)::after { content: "→"; }
+        .process-step:nth-child(3)::after { content: "→"; }
+        .process-step:nth-child(4)::after { content: "→"; }
+        .process-step:nth-child(5)::after { content: "→"; }
+        .process-step:last-child::after { display: none; }
+        .process-step:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .process-step .step-icon {
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        .process-step:hover .step-icon {
+            background-color: var(--secondary-color);
+            transform: rotate(360deg);
+        }
+        .process-step h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* 关于我们样式 - 图片替换为渐变+图标占位 */
+        .about {
+            padding: 80px 0;
+        }
+        .about-team {
+            margin-top: 50px;
+        }
+        .team-member {
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+        /* 团队成员头像占位 */
+        .team-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .team-member:hover .team-avatar {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 20px rgba(0, 120, 215, 0.3);
+            transform: scale(1.05);
+        }
+        .team-member h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        .team-member:hover h4 {
+            color: var(--primary-color);
+        }
+        .team-member p {
+            color: #666;
+            font-size: 14px;
+        }
+        .certificates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        /* 资质证书占位 */
+        .certificate-item {
+            width: 200px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 30px;
+        }
+        .certificate-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #005ea6 0%, var(--primary-color) 100%);
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 60px 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        .footer-top {
+            margin-bottom: 40px;
+        }
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-col h3::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .footer-col ul li:hover {
+            transform: translateX(5px);
+        }
+        .footer-col ul li a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+        .footer-col .contact-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-col .contact-list li i {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* 响应式样式 */
+        @media (max-width: 992px) {
+            .intro-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .intro-img {
+                width: 100%;
+                height: 300px;
+            }
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::after {
+                left: 15px;
+            }
+            .right {
+                left: 0;
+            }
+            .process-item {
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
+            }
+            .process-step {
+                margin-bottom: 20px;
+            }
+            .process-step::after {
+                display: none;
+            }
+            .service-process::before {
+                display: none;
+            }
+            .contact-info {
+                position: fixed;
+                right: 10px;
+                top: auto;
+                bottom: 20px;
+                transform: none;
+                width: calc(100% - 20px);
+                max-width: 300px;
+            }
+        }
+        @media (max-width: 768px) {
+            .banner h1 {
+                font-size: 36px;
+            }
+            .banner .icon-placeholder {
+                font-size: 60px;
+            }
+            .section-title h2 {
+                font-size: 28px;
+            }
+            .navbar-nav .nav-link {
+                margin: 5px 0;
+            }
+            .process-step {
+                width: 120px;
+            }
+            .team-avatar {
+                width: 150px;
+                height: 150px;
+                font-size: 30px;
+            }
+            .certificate-item {
+                width: 160px;
+                height: 120px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面加载动画 -->
+    <div class="loader" id="loader">
+        <div class="text-center">
+            <div class="loader-logo">慧建云</div>
+            <div class="loader-dots">
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa fa-cloud"></i> 慧建云
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#business">业务内容</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cases">行业案例</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#service">服务体系</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">关于我们</a>
+                    </li>
+                </ul>
+                <a href="#contact" class="nav-link contact-btn">
+                    <i class="fa fa-phone"></i> 立即咨询
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部Banner -->
+    <section class="banner" id="home">
+        <div class="container text-center">
+            <div class="icon-placeholder">
+                <i class="fa fa-rocket"></i>
+            </div>
+            <h1>让技术赋能每一个企业</h1>
+            <p>慧建云专注企业数字化转型，提供专属系统定制、AI智能体定制、多地区数字化服务，助力企业布局全球市场</p>
+            <a href="#contact" class="btn btn-custom btn-pulse">
+                <i class="fa fa-calendar"></i> 预约一对一服务
+            </a>
+        </div>
+    </section>
+
+    <!-- 公司介绍 -->
+    <section class="company-intro">
+        <div class="container">
+            <div class="section-title scroll-animate">
+                <h2>关于慧建云</h2>
+                <p>深耕数字化领域，赋能企业全球化发展</p>
+            </div>
+            <div class="intro-content">
+                <div class="intro-img scroll-animate scroll-delay-1">
+                    <i class="fa fa-building"></i>
+                </div>
+                <div class="intro-text scroll-animate scroll-delay-2">
+                    <h3>公司概述</h3>
+                    <p>慧建云成立于2018年4月，是阿里巴巴钉钉战略合作伙伴，专注于企业深度数字化服务。截至2022年，已帮助超500家企业实现数字化升级，覆盖制造、零售、建筑、餐饮等多个行业。2024年成立马来西亚分公司，2025年成立香港分公司，正式布局东南亚及港澳市场，成为阿里钉钉海外资深合作伙伴。</p>
+                    <p>我们以“技术向善、客户为先、持续创新”为使命，致力于通过数字化转型服务、专属系统定制开发、AI智能体定制私有化部署等核心业务，为企业打造全链路数字化解决方案。</p>
+                    <a href="#about" class="btn btn-custom">了解更多</a>
+                </div>
+            </div>
+
+            <!-- 发展历程时间轴 -->
+            <div class="timeline">
+                <div class="timeline-item left scroll-animate">
+                    <div class="timeline-content">
+                        <h4>2018年4月</h4>
+                        <p>慧建云正式成立，开启企业深度数字化服务探索之路</p>
+                    </div>
+                </div>
+                <div class="timeline-item right scroll-animate">
+                    <div class="timeline-content">
+                        <h4>2022年3月</h4>
+                        <p>累计帮助超500家企业实现数字化升级，解决方案获市场广泛认可</p>
+                    </div>
+                </div>
+                <div class="timeline-item left scroll-animate">
+                    <div class="timeline-content">
+                        <h4>2023年3月</h4>
+                        <p>与阿里巴巴钉钉达成战略合作，共同成立“钉钉数字化方案中心”</p>
+                    </div>
+                </div>
+                <div class="timeline-item right scroll-animate">
+                    <div class="timeline-content">
+                        <h4>2024年1月</h4>
+                        <p>成立马来西亚分公司，布局东南亚市场，成为阿里钉钉海外资深合作伙伴</p>
+                    </div>
+                </div>
+                <div class="timeline-item left scroll-animate">
+                    <div class="timeline-content">
+                        <h4>2025年</h4>
+                        <p>成立香港分公司，拓展港澳地区企业数字化服务</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 业务内容 -->
+    <section class="business" id="business">
+        <div class="container">
+            <div class="section-title scroll-animate">
+                <h2>核心业务</h2>
+                <p>一站式数字化解决方案，满足企业全场景需求</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="business-card scroll-animate scroll-delay-1">
+                        <div class="icon">
+                            <i class="fa fa-cloud"></i>
+                        </div>
+                        <h3>企业数字化转型服务</h3>
+                        <p>涵盖办公数字化、组织数字化、业务数字化，基于钉钉生态打造全链路数字化办公体系，提升企业运营效率。</p>
+                        <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="business-card scroll-animate scroll-delay-2">
+                        <div class="icon">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <h3>专属系统定制开发</h3>
+                        <p>支持低代码快速构建与源代码深度开发，量身打造ERP、CRM、OA等管理系统，100%匹配企业独特业务流程。</p>
+                        <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="business-card scroll-animate scroll-delay-3">
+                        <div class="icon">
+                            <i class="fa fa-robot"></i>
+                        </div>
+                        <h3>AI智能体定制私有化部署</h3>
+                        <p>结合企业场景定制专属AI智能体，私有化部署保障数据安全，实现业务流程智能化，提升决策效率。</p>
+                        <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="business-card scroll-animate">
+                        <div class="icon">
+                            <i class="fa fa-globe"></i>
+                        </div>
+                        <h3>多地区数字化服务</h3>
+                        <p>深耕东南亚市场，提供本土化合规化的数字化解决方案，核心团队本地办公，实现零时差响应。</p>
+                        <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行业案例 -->
+    <section class="cases" id="cases">
+        <div class="container">
+            <div class="section-title scroll-animate">
+                <h2>行业案例</h2>
+                <p>深耕各行业数字化实践，打造可复制的成功经验</p>
+            </div>
+            <!-- 案例标签切换 -->
+            <div class="case-tabs scroll-animate">
+                <div class="case-tab active" data-tab="construction">建筑行业</div>
+                <div class="case-tab" data-tab="manufacture">制造行业</div>
+                <div class="case-tab" data-tab="medical">医疗行业</div>
+                <div class="case-tab" data-tab="retail">零售行业</div>
+                <div class="case-tab" data-tab="catering">餐饮行业</div>
+                <div class="case-tab" data-tab="finance">金融行业</div>
+            </div>
+
+            <!-- 建筑行业案例 -->
+            <div class="case-content active" id="construction">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-1">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-building-o"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>广东元辰建筑工程有限公司</h3>
+                                <p>通过数字化解决方案实现进度可视化管控、成本自动归集、跨部门协同升级，减少人工统计误差，提前预警资金风险，项目工期延误率降低30%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-2">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-industry"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>澳洲KwikservScaffoldingPtyLtd</h3>
+                                <p>定制化数字化管理系统，优化资源调度与文档合规管理，节省50%系统研发成本，项目运营效率提升40%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 制造行业案例 -->
+            <div class="case-content" id="manufacture">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-1">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-cogs"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>平衡石化</h3>
+                                <p>从“流程驱动”到“数据智能”的跨越，重构ERP系统，实现核心财务流程自动化，资金使用效率提升25%，风险防控能力显著增强。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-2">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-microchip"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>台湾睿诠电子科技有限公司</h3>
+                                <p>重构ERP系统并接入大模型，打破系统孤岛，实现全链路流程自动化，运营效率提升30%，为智能采购、生产、营销奠定基础。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 医疗行业案例 -->
+            <div class="case-content" id="medical">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-1">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-heartbeat"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>罗欣药业</h3>
+                                <p>基于钉钉实现全员AI生产方式转型，通过三步法完成数字化升级，样本管理效率提升40%，报告生成效率提升50%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-2">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-medkit"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>瑞派宠物医院</h3>
+                                <p>钉钉助力瑞派优化样本追踪、设备管理流程，实现多机构协作标准化，服务质量与效率双提升，客户满意度提升35%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 零售行业案例 -->
+            <div class="case-content" id="retail">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-1">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-shopping-bag"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>百丽国际</h3>
+                                <p>覆盖300+城市、万家门店的数字化升级，提升组织学习效率，门店运营管理效率提升30%，招商加盟转化效率提升25%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-2">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-home"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>顾家家居</h3>
+                                <p>全员上钉实现数字化办公升级，私域运营效率提升40%，AI评价分析让线上流量转化提升20%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 餐饮行业案例 -->
+            <div class="case-content" id="catering">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-1">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-cutlery"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>连锁门店智慧运营方案</h3>
+                                <p>通过钉钉低代码搭建巡店、绩效、招商管理应用，门店巡检整改效率提升50%，招商进度管控精准度提升40%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-item scroll-animate scroll-delay-2">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-coffee"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>团餐管理系统</h3>
+                                <p>定制化团餐管理系统，实现流程自动化、数据驱动决策，运营成本降低15%，用户参与度提升30%。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 金融行业案例 -->
+            <div class="case-content" id="finance">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3">
+                        <div class="case-item scroll-animate">
+                            <div class="case-img-placeholder">
+                                <i class="fa fa-money"></i>
+                            </div>
+                            <div class="case-text">
+                                <h3>新加坡某理财公司财富管理系统</h3>
+                                <p>AI驱动型CRM智能助手，整合知识管理、风险洞察、个性化投顾能力，顾问服务效率提升40%，客户信任度显著增强。</p>
+                                <a href="#" class="btn btn-custom btn-sm">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务体系 -->
+    <section class="service" id="service">
+        <div class="container">
+            <div class="section-title scroll-animate">
+                <h2>服务体系</h2>
+                <p>全周期服务保障，让数字化转型更省心</p>
+            </div>
+            <div class="service-process scroll-animate">
+                <div class="process-item">
+                    <div class="process-step scroll-delay-1">
+                        <div class="step-icon">1</div>
+                        <h4>需求对接</h4>
+                        <p>需求访谈+初步诊断</p>
+                    </div>
+                    <div class="process-step scroll-delay-2">
+                        <div class="step-icon">2</div>
+                        <h4>方案设计</h4>
+                        <p>定制方案+评审确认</p>
+                    </div>
+                    <div class="process-step scroll-delay-3">
+                        <div class="step-icon">3</div>
+                        <h4>项目启动</h4>
+                        <p>资源筹备+分工明确</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-icon">4</div>
+                        <h4>开发实施</h4>
+                        <p>定制开发+质量把控</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-icon">5</div>
+                        <h4>验收上线</h4>
+                        <p>测试验收+部署交付</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-icon">6</div>
+                        <h4>运维支持</h4>
+                        <p>7×24小时+持续优化</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5 scroll-animate">
+                <p class="fs-5">数字化专员免费咨询对接 → 免费上门调研 → 免费提供企业量体裁衣数字化解决方案</p>
+                <a href="#contact" class="btn btn-custom mt-3 btn-pulse">
+                    <i class="fa fa-user"></i> 免费对接数字化专员
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-title scroll-animate">
+                <h2>关于我们</h2>
+                <p>专业团队+权威资质，值得信赖的数字化伙伴</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 scroll-animate scroll-delay-1">
+                    <h3 class="mb-4">企业文化</h3>
+                    <p class="mb-4">核心价值观：思人之所想，先慧以力行</p>
+                    <p class="mb-4">企业使命：技术向善、客户为先、持续创新</p>
+                    <p>企业愿景：让技术赋能每一个企业</p>
+                    <div class="mt-5">
+                        <h3 class="mb-4">办公地址</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fa fa-map-marker text-primary me-2"></i> 广东分部：广州市海珠区逸景路353号合创中心21楼2116室</li>
+                            <li class="mb-2"><i class="fa fa-map-marker text-primary me-2"></i> 香港分部：WORKSHOP 60,3/F BLK A EAST SUN IND CTR NO 16 SHING YIP ST KWUN TONG HONG KONG</li>
+                            <li><i class="fa fa-map-marker text-primary me-2"></i> 马来西亚分部：2-25, THE CUBE JALAN PUTERI 7/15 BANDAR PUTERI 47100 PUCHONG SELANGOR MALAYSIA</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 scroll-animate scroll-delay-2">
+                    <h3 class="mb-4">核心团队</h3>
+                    <div class="about-team row">
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <div class="team-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <h4>陈军</h4>
+                                <p>马来西亚分公司负责人</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <div class="team-avatar">
+                                    <i class="fa fa-user-circle"></i>
+                                </div>
+                                <h4>龚小姐</h4>
+                                <p>广东分部商务总监</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="team-member">
+                                <div class="team-avatar">
+                                    <i class="fa fa-user-o"></i>
+                                </div>
+                                <h4>张总</h4>
+                                <p>技术总监</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="mt-5 mb-4">公司资质</h3>
+                    <div class="certificates">
+                        <div class="certificate-item">
+                            <i class="fa fa-certificate"></i>
+                        </div>
+                        <div class="certificate-item">
+                            <i class="fa fa-shield"></i>
+                        </div>
+                        <div class="certificate-item">
+                            <i class="fa fa-trophy"></i>
+                        </div>
+                        <div class="certificate-item">
+                            <i class="fa fa-award"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-top row">
+                <div class="col-lg-3 col-md-6 footer-col">
+                    <h3>慧建云</h3>
+                    <p>让技术赋能每一个企业</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3"><i class="fa fa-weixin fa-2x"></i></a>
+                        <a href="#" class="me-3"><i class="fa fa-linkedin fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-envelope fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-col">
+                    <h3>核心业务</h3>
+                    <ul>
+                        <li><a href="#">企业数字化转型服务</a></li>
+                        <li><a href="#">专属系统定制开发</a></li>
+                        <li><a href="#">AI智能体定制私有化部署</a></li>
+                        <li><a href="#">多地区数字化服务</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-col">
+                    <h3>行业案例</h3>
+                    <ul>
+                        <li><a href="#">建筑行业</a></li>
+                        <li><a href="#">制造行业</a></li>
+                        <li><a href="#">医疗行业</a></li>
+                        <li><a href="#">零售/餐饮行业</a></li>
+                        <li><a href="#">金融行业</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-col">
+                    <h3>联系我们</h3>
+                    <ul class="contact-list">
+                        <li><i class="fa fa-phone"></i> 广东/香港：18925117787（龚小姐）</li>
+                        <li><i class="fa fa-phone"></i> 马来西亚：+65 86693678（ChenJun）</li>
+                        <li><i class="fa fa-envelope"></i> metahqy@163.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 慧建云信息技术有限公司 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 强制2秒关闭加载页（不依赖任何资源加载状态）
+        (function() {
+            // 页面加载后立即启动倒计时，无需等待资源
+            setTimeout(function() {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                    // 0.3秒后彻底移除加载层，避免遮挡
+                    setTimeout(function() {
+                        loader.style.display = 'none';
+                    }, 300);
+                }
+            }, 2000); // 固定2秒，毫秒单位（2000=2秒）
+        })();
+
+        // 滚动动画
+        window.addEventListener('scroll', function() {
+            const animateElements = document.querySelectorAll('.scroll-animate');
+            animateElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+
+            // 时间轴动画
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                const itemTop = item.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (itemTop < windowHeight - 150) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // 案例标签切换
+        const caseTabs = document.querySelectorAll('.case-tab');
+        const caseContents = document.querySelectorAll('.case-content');
+
+        caseTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                caseTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                caseContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                setTimeout(function() {
+                    window.dispatchEvent(new Event('scroll'));
+                }, 100);
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 导航栏滚动样式变化
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '10px 0';
+                navbar.style.backgroundColor = '#fff';
+                navbar.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.padding = '15px 0';
+                navbar.style.backgroundColor = '#fff';
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // 初始触发滚动动画（确保首页内容正常显示）
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>
